@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Art/white-square-png-10.png" type="Texture" id=1]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 0.235294, 0.160784, 0.356863, 1 )
+position = Vector2( 651, 273 )
+scale = Vector2( 3.31667, 1.82833 )
+texture = ExtResource( 1 )
