@@ -18,7 +18,7 @@ jobs:
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: html
-          ITCH_GAME: gravity
+          ITCH_GAME: crossbolt
           ITCH_USER: cloudlight-games
           PACKAGE: html.zip
           VERSION: ${{ steps.download-html.outputs.version }}

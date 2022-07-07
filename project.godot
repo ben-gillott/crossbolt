@@ -32,7 +32,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Gravity"
+config/name="Crossbolt"
 run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://Art/icon.png"
 
