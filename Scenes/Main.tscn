@@ -4,7 +4,7 @@
 
 [node name="Node2D" type="Node2D"]
 
-[node name="hello2" type="Sprite" parent="."]
+[node name="hello3" type="Sprite" parent="."]
 modulate = Color( 0.235294, 0.160784, 0.356863, 1 )
 position = Vector2( 651, 273 )
 scale = Vector2( 3.31667, 1.82833 )
