@@ -1,9 +1,5 @@
 extends KinematicBody2D
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 export (int) var speed = 500
 export (int) var jump_speed = -500
 export (int) var gravity = 800
@@ -11,6 +7,7 @@ export (float, 0, 1.0) var friction = 0.3
 export (float, 0, 1.0) var acceleration = 0.50
 
 var velocity = Vector2.ZERO
+var boltScene = preload("res://Scenes/Bolt.tscn")
 
 func get_input():
 	var dir = 0
@@ -22,6 +19,16 @@ func get_input():
 		velocity.x = lerp(velocity.x, dir * speed, acceleration)
 	else:
 		velocity.x = lerp(velocity.x, 0, friction)
+		
+	#Shooting:
+	if Input.is_action_just_pressed("fire"):
+		shoot()
+
+func shoot():
+	var bolt = boltScene.instance()
+	bolt.position = $BoltStart.global_position
+	owner.add_child(bolt) #adds bolt to the world instead of the player
+	
 
 func _physics_process(delta):
 	get_input()

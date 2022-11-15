@@ -1,3 +1,3 @@
 extends Node
 
-signal score_changed(value)
+#signal score_changed(value)
