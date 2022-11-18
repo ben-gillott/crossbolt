@@ -43,26 +43,31 @@ func get_input(delta):
 		else:
 			melee()
 	elif Input.is_action_pressed("reload"):
-		if loaded:
-			print("already loaded")
-		elif actionState == ACTIONS.FIRING or actionState == ACTIONS.MELEEING:
-			print("fire while reloading - reload interrupted")
-			reloadTimer = 0
-		elif actionState == ACTIONS.IDLE:
-			print("starting reload")
-			actionState = ACTIONS.RELOADING
-			reloadTimer = 0
-		elif actionState == ACTIONS.RELOADING:
-			print("Reloading, at ", reloadTimer, " ms")
-			reloadTimer += delta
-			if reloadTimer >= RELOAD_TIME:
-				loaded = true
-				print("Reloaded!")
-				actionState = ACTIONS.IDLE
+		reload(delta)
 	elif (not Input.is_action_pressed("reload")) and (actionState == ACTIONS.RELOADING):
 		print("reload released early")
 		actionState = ACTIONS.IDLE;
 		reloadTimer = 0
+
+
+func reload(delta):
+	if loaded:
+		print("already loaded")
+	elif actionState == ACTIONS.FIRING or actionState == ACTIONS.MELEEING:
+		print("fire while reloading - reload interrupted")
+		reloadTimer = 0
+	elif actionState == ACTIONS.IDLE:
+		print("starting reload")
+		actionState = ACTIONS.RELOADING
+		reloadTimer = 0
+	elif actionState == ACTIONS.RELOADING:
+		print("Reloading, at ", reloadTimer, " ms")
+		reloadTimer += delta
+		if reloadTimer >= RELOAD_TIME:
+			loaded = true
+			print("Reloaded!")
+			actionState = ACTIONS.IDLE
+	
 	
 func shoot():
 	actionState = ACTIONS.FIRING
@@ -82,6 +87,8 @@ func melee():
 func _physics_process(delta):
 	get_input(delta)
 	flip()
+	bow_animation()
+	
 	velocity.y += JUMP_GRAVITY * delta
 	velocity = move_and_slide(velocity, Vector2.UP)
 	if Input.is_action_just_pressed("jump"):
@@ -100,3 +107,31 @@ func flip():
 	if abs(diff) > flipZoneWidth and lookDir != sign(diff): #if beyond little mid zone
 		apply_scale(Vector2(-1, 1)) # flip
 		lookDir = sign(diff)
+
+
+
+var bowMaxScale = 22
+var bowMaxPos = 16
+var bowMinScale = 4
+var bowMinPos = 25
+var loadedColor = Color(0,1,0)
+var loadingColor = Color(1,0,1)
+var notLoadedColor = Color(1,0,0)
+#this should be handled by animation tree later
+func bow_animation():
+	if loaded:
+		$Crossbow_Bow.modulate = loadedColor
+		$Crossbow_Draw.modulate = loadedColor
+		$Crossbow_Draw.position.x = bowMaxPos
+		$Crossbow_Draw.scale.x = bowMaxScale
+	elif actionState == ACTIONS.RELOADING:
+		#lerp size by timer
+		$Crossbow_Bow.modulate = loadingColor
+		$Crossbow_Draw.modulate = loadingColor
+		$Crossbow_Draw.position.x = lerp(bowMinPos, bowMaxPos, reloadTimer/RELOAD_TIME)
+		$Crossbow_Draw.scale.x = lerp(bowMinScale, bowMaxScale, reloadTimer/RELOAD_TIME)
+	else: #not reloading and not loaded
+		$Crossbow_Bow.modulate = notLoadedColor
+		$Crossbow_Draw.modulate = notLoadedColor
+		$Crossbow_Draw.position.x = bowMinPos
+		$Crossbow_Draw.scale.x = bowMinScale
