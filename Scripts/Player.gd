@@ -81,6 +81,7 @@ func melee():
 	
 func _physics_process(delta):
 	get_input(delta)
+	flip()
 	velocity.y += JUMP_GRAVITY * delta
 	velocity = move_and_slide(velocity, Vector2.UP)
 	if Input.is_action_just_pressed("jump"):
@@ -92,4 +93,10 @@ func _physics_process(delta):
 		queue_free()
 
 
-
+var lookDir = 1
+func flip():
+	var diff = get_global_mouse_position().x - global_position.x
+	var flipZoneWidth = 10 #Declare a mid zone to eliminate jittering
+	if abs(diff) > flipZoneWidth and lookDir != sign(diff): #if beyond little mid zone
+		apply_scale(Vector2(-1, 1)) # flip
+		lookDir = sign(diff)
